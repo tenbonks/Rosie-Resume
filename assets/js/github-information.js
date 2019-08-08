@@ -28,11 +28,14 @@ function fetchGitHubInformation(event) {
         </div>`);
 
     $.when(
-        $.getJSON(`https://api.github.com/users/${username}`)                            //When this is done
+        $.getJSON(`https://api.github.com/users/${username}`)                            //When jQuery has obtained the data from these url's
+        $.getJSON(`https://api.github.com/users/${username}/repos`)
     ).then(
-        function(response) {
-            var userData = response;
-            $("#gh-user-data").html(userInformationHTML(userData));                      //This will be executed, and change the html   
+        function(firstResponse, secondResponse) {
+            var userData = firstResponse;
+            var repoData = secondResponse;
+            $("#gh-user-data").html(userInformationHTML(userData));                      //This will be executed, and display the data in the targeted ID
+            $("#gh-repo-data").html(userInformationHTML(repoData)); 
         },
         function(errorResponse) {
             if (errorResponse.status === 404) {                                          //If the page is not found
